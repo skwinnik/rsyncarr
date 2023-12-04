@@ -29,11 +29,13 @@ export class SyncService {
       return;
     }
 
+    this.logger.log(`Syncing ${pathName}`);
     this.lock.set(pathName, true);
     try {
       await this._syncPath([], path.sourcePath, path.targetPath);
     } finally {
       this.lock.set(pathName, false);
+      this.logger.log(`Syncing ${pathName} finished`);
     }
   }
 
