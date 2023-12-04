@@ -7,12 +7,11 @@ import { IFile } from '@/ftp/types';
 @Injectable()
 export class FilesService {
   public async exists(file: IFile, localFilePath: string): Promise<boolean> {
-    const fileExists = fs.existsSync(localFilePath);
-    if (!fileExists) {
+    try {
+      const stat = await fs.promises.stat(localFilePath);
+      return stat.size === file.size;
+    } catch (e) {
       return false;
     }
-
-    const stats = fs.statSync(localFilePath);
-    return stats.size === file.size;
   }
 }
