@@ -16,19 +16,33 @@ export class SyncScheduleService {
     this.paths = config.paths;
   }
 
+  private copyMutex = false;
   @Cron('0 * * * * *')
   public async startCopy() {
-    const promises = this.paths.map((path) =>
-      this.syncCopyService.copyRemote(path.name),
-    );
-    await Promise.all(promises);
+    if (this.copyMutex) return;
+
+    this.copyMutex = true;
+    try {
+      for (const path of this.paths) {
+        await this.syncCopyService.copyRemote(path.name);
+      }
+    } finally {
+      this.copyMutex = false;
+    }
   }
 
+  private cleanMutex = false;
   @Cron('0 * * * * *')
   public async startClean() {
-    const promises = this.paths.map((path) =>
-      this.syncCleanService.cleanLocal(path.name),
-    );
-    await Promise.all(promises);
+    if (this.cleanMutex) return;
+
+    this.cleanMutex = true;
+    try {
+      for (const path of this.paths) {
+        await this.syncCleanService.cleanLocal(path.name);
+      }
+    } finally {
+      this.cleanMutex = false;
+    }
   }
 }
