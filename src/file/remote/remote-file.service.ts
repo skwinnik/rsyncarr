@@ -10,7 +10,7 @@ import { FileFactory } from '@/lib/file.factory';
 
 @Injectable()
 export class RemoteFileService implements IFileService {
-  private readonly requestLimit = 7;
+  private readonly requestLimit = 3;
   constructor(private readonly ftpClient: FtpClient) {}
 
   public async traverse(parentFilePath: string): Promise<IFile[]> {

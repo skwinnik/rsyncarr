@@ -69,6 +69,8 @@ export class LocalFileService implements IFileService {
   }
 
   public async delete(file: IFile): Promise<void> {
-    await fs.promises.rm(file.fullPath);
+    await fs.promises.rm(file.fullPath, {
+      force: true,
+    });
   }
 }
