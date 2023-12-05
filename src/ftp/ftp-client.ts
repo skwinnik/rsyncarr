@@ -1,15 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
 import * as SFTPClient from 'ssh2-sftp-client';
 
-import { APP_CONFIG, IConfig } from '@/config/types';
+import { IConfig } from '@/config/types';
 import { IFtpClientOptions } from '@/ftp/types';
 
-@Injectable()
 export class FtpClient {
   private client: SFTPClient;
   private options: IFtpClientOptions;
 
-  constructor(@Inject(APP_CONFIG) config: IConfig) {
+  constructor(config: IConfig) {
     this.client = new SFTPClient();
     this.options = {
       host: config.auth.host,

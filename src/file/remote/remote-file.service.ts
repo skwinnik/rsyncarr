@@ -5,13 +5,17 @@ import { eachLimit } from 'async';
 import sftp from 'ssh2-sftp-client';
 
 import { IFile, IFileService } from '@/file/types';
-import { FtpClient } from '@/ftp/ftp.client';
+import { FtpClient } from '@/ftp/ftp-client';
+import { FtpClientFactory } from '@/ftp/ftp-client.factory';
 import { FileFactory } from '@/lib/file.factory';
 
 @Injectable()
 export class RemoteFileService implements IFileService {
   private readonly requestLimit = 3;
-  constructor(private readonly ftpClient: FtpClient) {}
+  private readonly ftpClient: FtpClient;
+  constructor(private readonly ftpClientFactory: FtpClientFactory) {
+    this.ftpClient = ftpClientFactory.create();
+  }
 
   public async traverse(parentFilePath: string): Promise<IFile[]> {
     const parentFileStat = await this.ftpClient.stat(parentFilePath);

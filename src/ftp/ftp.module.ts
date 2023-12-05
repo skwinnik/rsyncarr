@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 
-import { FtpClient } from '@/ftp/ftp.client';
+import { FtpClientFactory } from '@/ftp/ftp-client.factory';
 
 @Module({
-  providers: [FtpClient],
-  exports: [FtpClient],
+  providers: [FtpClientFactory],
+  exports: [FtpClientFactory],
 })
 export class FtpModule {}

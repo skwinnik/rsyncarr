@@ -32,7 +32,7 @@ export class SyncScheduleService {
   }
 
   private cleanMutex = false;
-  @Cron('0 * * * * *')
+  @Cron('30 * * * * *')
   public async startClean() {
     if (this.cleanMutex) return;
 

@@ -6,7 +6,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { APP_CONFIG, IConfig } from '@/config/types';
 import { LocalFileService } from '@/file/local/local-file.service';
 import { RemoteFileService } from '@/file/remote/remote-file.service';
-import { FtpClient } from '@/ftp/ftp.client';
+import { FtpClientFactory } from '@/ftp/ftp-client.factory';
 import { DownloadLogger } from '@/lib/download-logger';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class SyncCopyService {
   private readonly paths: IConfig['paths'];
 
   constructor(
-    private readonly ftpClient: FtpClient,
+    private readonly ftpClientFactory: FtpClientFactory,
     private readonly localFileService: LocalFileService,
     private readonly remoteFileService: RemoteFileService,
     @Inject(APP_CONFIG) config: IConfig,
@@ -65,12 +65,13 @@ export class SyncCopyService {
 
   private async download(remoteFilePath: string, localFilePath: string) {
     const downloadLogger = new DownloadLogger(localFilePath);
+    const ftpClient = this.ftpClientFactory.create();
 
     this.createPath(localFilePath);
 
     downloadLogger.start();
 
-    await this.ftpClient.fastGet(
+    await ftpClient.fastGet(
       remoteFilePath,
       localFilePath,
       (totalTransferred, chunk, total) =>

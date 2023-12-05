@@ -3,7 +3,6 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { APP_CONFIG, IConfig } from '@/config/types';
 import { LocalFileService } from '@/file/local/local-file.service';
 import { RemoteFileService } from '@/file/remote/remote-file.service';
-import { FtpClient } from '@/ftp/ftp.client';
 
 @Injectable()
 export class SyncCleanService {
@@ -12,7 +11,6 @@ export class SyncCleanService {
   private readonly paths: IConfig['paths'];
 
   constructor(
-    private readonly ftpClient: FtpClient,
     private readonly localFileService: LocalFileService,
     private readonly remoteFileService: RemoteFileService,
     @Inject(APP_CONFIG) config: IConfig,
