@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 
-import { FilesModule } from '@/files/files.module';
+import { FileModule } from '@/file/file.module';
 import { FtpModule } from '@/ftp/ftp.module';
-import { SyncService } from '@/sync/sync.service';
+import { SyncCleanService } from '@/sync/sync-clean.service';
+import { SyncCopyService } from '@/sync/sync-copy.service';
 
 @Module({
-  imports: [FtpModule, FilesModule],
-  providers: [SyncService],
-  exports: [SyncService],
+  imports: [FtpModule, FileModule],
+  providers: [SyncCopyService, SyncCleanService],
+  exports: [SyncCopyService, SyncCleanService],
 })
 export class SyncModule {}

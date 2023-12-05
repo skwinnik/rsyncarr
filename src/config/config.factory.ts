@@ -58,8 +58,8 @@ export class ConfigFactory {
 
     return paths.split(',').map((path) => ({
       name: path.split(':')[0],
-      sourcePath: path.split(':')[1],
-      targetPath: path.split(':')[2],
+      remotePath: path.split(':')[1],
+      localPath: path.split(':')[2],
     }));
   }
 }

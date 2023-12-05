@@ -10,8 +10,8 @@ export interface IConfig {
   };
   paths: {
     name: string;
-    sourcePath: string;
-    targetPath: string;
+    remotePath: string;
+    localPath: string;
   }[];
 }
 
