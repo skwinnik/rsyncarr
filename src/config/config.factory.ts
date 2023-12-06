@@ -26,6 +26,11 @@ export class ConfigFactory {
           configService.get<string>('auth.password'),
       },
       paths: this.preparePaths(configService),
+      notification: {
+        url:
+          configService.get<string>('NOTIFICATION_URL') ||
+          configService.get<string>('notification.url'),
+      },
     } as IConfig;
 
     ConfigFactory.Logger.log(JSON.stringify(config, null, 2));

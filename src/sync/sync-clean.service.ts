@@ -3,6 +3,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { APP_CONFIG, IConfig } from '@/config/types';
 import { LocalFileService } from '@/file/local/local-file.service';
 import { RemoteFileService } from '@/file/remote/remote-file.service';
+import { NotificationService } from '@/notification/notification.service';
 
 @Injectable()
 export class SyncCleanService {
@@ -13,6 +14,7 @@ export class SyncCleanService {
   constructor(
     private readonly localFileService: LocalFileService,
     private readonly remoteFileService: RemoteFileService,
+    private readonly notificationService: NotificationService,
     @Inject(APP_CONFIG) config: IConfig,
   ) {
     this.paths = config.paths;
@@ -51,6 +53,8 @@ export class SyncCleanService {
         this.logger.log(`Removing ${localFile.fullPath}`);
 
         await this.localFileService.delete(localFile);
+
+        await this.notificationService.cleaned(localFile);
       }
     }
   }

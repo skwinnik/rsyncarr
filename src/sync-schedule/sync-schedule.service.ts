@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 
 import { APP_CONFIG, IConfig } from '@/config/types';
+import { NotificationService } from '@/notification/notification.service';
 import { SyncCleanService } from '@/sync/sync-clean.service';
 import { SyncCopyService } from '@/sync/sync-copy.service';
 
@@ -11,6 +12,7 @@ export class SyncScheduleService {
   constructor(
     private readonly syncCopyService: SyncCopyService,
     private readonly syncCleanService: SyncCleanService,
+    private readonly notificationService: NotificationService,
     @Inject(APP_CONFIG) config: IConfig,
   ) {
     this.paths = config.paths;
@@ -26,6 +28,8 @@ export class SyncScheduleService {
       for (const path of this.paths) {
         await this.syncCopyService.copyRemote(path.name);
       }
+    } catch (error) {
+      await this.notificationService.error(error);
     } finally {
       this.copyMutex = false;
     }
@@ -41,6 +45,8 @@ export class SyncScheduleService {
       for (const path of this.paths) {
         await this.syncCleanService.cleanLocal(path.name);
       }
+    } catch (error) {
+      await this.notificationService.error(error);
     } finally {
       this.cleanMutex = false;
     }

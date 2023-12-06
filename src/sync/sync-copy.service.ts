@@ -8,6 +8,7 @@ import { LocalFileService } from '@/file/local/local-file.service';
 import { RemoteFileService } from '@/file/remote/remote-file.service';
 import { FtpClientFactory } from '@/ftp/ftp-client.factory';
 import { DownloadLogger } from '@/lib/download-logger';
+import { NotificationService } from '@/notification/notification.service';
 
 @Injectable()
 export class SyncCopyService {
@@ -19,6 +20,7 @@ export class SyncCopyService {
     private readonly ftpClientFactory: FtpClientFactory,
     private readonly localFileService: LocalFileService,
     private readonly remoteFileService: RemoteFileService,
+    private readonly notificationService: NotificationService,
     @Inject(APP_CONFIG) config: IConfig,
   ) {
     this.paths = config.paths;
@@ -59,7 +61,9 @@ export class SyncCopyService {
         continue;
       }
 
+      await this.notificationService.startDownload(remoteFile);
       await this.download(remoteFile.fullPath, localFullPath);
+      await this.notificationService.finishDownload(remoteFile);
     }
   }
 

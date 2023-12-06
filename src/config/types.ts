@@ -8,11 +8,16 @@ export interface IConfig {
     username: string;
     password: string;
   };
+
   paths: {
     name: string;
     remotePath: string;
     localPath: string;
   }[];
+
+  notification: {
+    url: string;
+  };
 }
 
 export const APP_CONFIG = Symbol('CONFIG');
